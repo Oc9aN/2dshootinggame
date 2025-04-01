@@ -55,6 +55,8 @@ public class Player : MonoBehaviour, IDamagable
     // 타겟 탐색 방식
     public TargetMode TargetMode = TargetMode.Closest;
 
+    public bool IsDeleteAllData = false;
+
     private void Awake()
     {
         // 초기값 저장
@@ -62,7 +64,10 @@ public class Player : MonoBehaviour, IDamagable
         _defaultHealth = _health;
         _defaultAttackCoolTime = _attackCoolTime;
 
-        PlayerPrefs.DeleteAll();
+        if (IsDeleteAllData)
+        {
+            PlayerPrefs.DeleteAll();
+        }
         _aesCrypto = new AESCrypto();
     }
 

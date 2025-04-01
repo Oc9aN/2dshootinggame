@@ -105,14 +105,12 @@ public class FollowerAttack : MonoBehaviour
         // 공격중
         EffectOn();
         
-        Debug.Log("공격중");
         _isAttacking = true;
         _attackTimer += Time.deltaTime;
         if (_attackTimer >= AttackTime)
         {
             // 공격 끝나면 coolTime 초기화
             AttackOff();
-            Debug.Log("공격 끝");
             return;
         }
         DrawRazer();

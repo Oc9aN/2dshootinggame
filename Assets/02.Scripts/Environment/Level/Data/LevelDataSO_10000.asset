@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: LevelDataSO_10000
   m_EditorClassIdentifier: 
   Level: 10000
-  DamageFactor: 100
-  HealthFactor: 100
-  SpeedFactor: 5
+  DamageFactor: 6
+  HealthFactor: 10
+  SpeedFactor: 2

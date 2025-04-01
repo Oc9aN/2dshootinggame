@@ -29,14 +29,17 @@ public class PlayerFire : PlayerComponent
 
         // 쿨타임이 아직 안됐으면 종료
         if (Cooltimer > 0) return;
+        
+        RecordFire();
+        Cooltimer = _player.AttackCoolTime;
 
-        // 자동 모드 이거나 "Fire1" 버튼이 입력되면..
-        if (_player.PlayMode == PlayMode.Auto || Input.GetButtonDown("Fire1"))
-        {
-            RecordFire();
-
-            Cooltimer = _player.AttackCoolTime;
-        }
+        // // 자동 모드 이거나 "Fire1" 버튼이 입력되면..
+        // if (_player.PlayMode == PlayMode.Auto || Input.GetButtonDown("Fire1"))
+        // {
+        //     RecordFire();
+        //
+        //     Cooltimer = _player.AttackCoolTime;
+        // }
     }
 
     private void RecordFire()

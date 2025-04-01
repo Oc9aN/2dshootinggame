@@ -24,8 +24,10 @@ public class PlayerMove : PlayerComponent
     private AutoTargetFindStrategy findStrategy;
 
     // 리플레이 Direction
-    private Vector2 _direction = Vector2.zero;  // 현재 이동방향
+    private Vector2 _direction = Vector2.zero; // 현재 이동방향
     private Vector2 _defalutPosition = Vector2.zero;
+
+    public DynamicJoystick Joystick;
 
     public Vector2 Direction
     {
@@ -38,8 +40,12 @@ public class PlayerMove : PlayerComponent
     {
         base.Awake();
         _myAnimator = GetComponent<Animator>();
-        
+
         _defalutPosition = transform.position;
+
+#if !UNITY_ANDROID
+        Destroy(Joystick.gameObject);
+#endif
     }
 
     private void Start()
@@ -117,18 +123,18 @@ public class PlayerMove : PlayerComponent
             direction += Vector2.down;
         else if (targetDistance > 5f) direction += Vector2.up;
 
-        RecordMovement(direction);  // 저장된 방향 값 사용
+        RecordMovement(direction); // 저장된 방향 값 사용
     }
 
     private void ManualMove()
     {
-        // 키보드, 마우스, 터치, 조이스틱 등 외부에서 들어오는
-        // 입력 소스는 모오오두 'Input' 클래스를 통해 관리할 수 있다.
-        //float h = Input.GetAxis("Horizontal"); // 수평 키 : -1f ~ 1f
         var h = Input.GetAxisRaw("Horizontal"); // 수평 키 : -1, 0, 1
-
-        //float v = Input.GetAxis("Vertical");  // 수직 키: -1f ~ 1f
         var v = Input.GetAxisRaw("Vertical"); // 수직 키: -1, 0, 1
+
+#if UNITY_ANDROID
+        h = Joystick.Horizontal;
+        v = Joystick.Vertical;
+#endif
 
         // 방향 만들기
         var direction = new Vector2(h, v);
@@ -139,7 +145,7 @@ public class PlayerMove : PlayerComponent
 
         // transform.Translate(direction * Speed * Time.deltaTime);
 
-        RecordMovement(direction);  // 저장된 방향 값 사용
+        RecordMovement(direction); // 저장된 방향 값 사용
     }
 
     private void MoveByDirection()
@@ -147,13 +153,13 @@ public class PlayerMove : PlayerComponent
         PlayAnimation(_direction);
         // 이동 위치 계산
         var newPosition = transform.position + (Vector3)(_direction * _player.MoveSpeed) * Time.deltaTime;
-        
+
         newPosition.y = Math.Clamp(newPosition.y, MinY, MaxY);
         // // 이동 위치 제한
         if (newPosition.x < MinX)
             newPosition.x = MinX;
         else if (newPosition.x > MaxX) newPosition.x = MaxX;
-        
+
         // // 넘어가면 반대로
         // if (newPosition.x < MinX)
         //     newPosition.x = MaxX;
@@ -169,7 +175,7 @@ public class PlayerMove : PlayerComponent
 
     private void RecordMovement(Vector2 direction)
     {
-        if (direction != _direction)    // 방향이 바뀌면 저장 및 기록
+        if (direction != _direction) // 방향이 바뀌면 저장 및 기록
         {
             // 커맨드 등록 및 실행
             ICommand command = new PlayerMoveCommand(this, direction);

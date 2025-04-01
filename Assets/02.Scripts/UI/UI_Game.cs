@@ -56,6 +56,8 @@ public class UI_Game : MonoBehaviour
     private void Start()
     {
         CurrencyManager.instance.OnCurrencyChangedCallback += RefreshGoldText;
+
+        RefreshGoldText();
     }
 
     // 기능: 새로고침

@@ -25,6 +25,8 @@ public class CurrencyManager : MonoBehaviour
     private CurrencySaveData _currencySaveData = new CurrencySaveData();
     private List<int> _values => _currencySaveData.Values;
     
+    public List<Sprite> CurrencyIconList = new List<Sprite>();
+    
     public event Action OnCurrencyChangedCallback;
 
     private void Awake()
